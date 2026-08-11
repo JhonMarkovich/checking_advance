@@ -12,6 +12,9 @@
                     console.log('Event_app: ', e)
 
                 }
+                if (e.type === 'player'){
+                    console.log('event_player: ', e)
+                }
 
             })   
             Lampa.Listener.follow('player', (event) => {
