@@ -4,24 +4,19 @@
     const startPlugin = () => {
             // Если еще не готова, ждем событие старта
             Lampa.Listener.follow('app', (e) => { // Lampa.Listener.follow используется как слушатель событий в объектах Lampa, 
-                                                        // то есть тут мы слушаем 
-                if (e.type == 'ready') { // если приложение загружено
+                                                        // то есть тут мым слушаем 
+                if (e.type == 'ready') {
                     console.log('ПЛАГИН ЗАПУЩЕН')
                     console.log('Объект window.Lampa:', window.Lampa)
                     console.log('Объект window: ', window)
                     console.log('Event_app: ', e)
 
-                    Lampa.Listener.follow('player', (event) => { // Listener для player объекта
-                        
-                        if (event.type == 'ready'){
-                            console.log('Event_player: ', event)
-                        }
-                    })
                 }
 
-                
-
             })   
+            Lampa.Listener.follow('player', (event) => {
+                    console.log('Event_player: ', event)
+            })
         }
     
     // Запускаем плагин, когда скрипт загрузится в систему
@@ -31,3 +26,4 @@
         window.addEventListener('load', startPlugin) // тут мы дожидаемся события 'load', то есть тогда когда загрузится приложение
     }
 })()
+
