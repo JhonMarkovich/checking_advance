@@ -15,7 +15,7 @@
 
             })   
             Lampa.Listener.follow('player', (event) => {
-                    console.log('Event_player: ', event)
+                console.log('Event_player: ', event)
             })
         }
     
