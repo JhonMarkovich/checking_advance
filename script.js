@@ -1,32 +1,38 @@
 (() => {
     'use strict';
 
-    const startPlugin = () => {
-        // Слушаем изменения экранов приложения
-        Lampa.Listener.follow('activity', (e) => {
-            
-            // Проверяем, что открылся экран плеера (даже если это iFrame балансера)
-            if (e.type === 'start' && e.component === 'player') {
-                console.log('🔥 УРА! ОБНАРУЖЕН ЗАПУСК ВИДЕО (Экран плеера открыт):', e);
-                
-                // Проверяем, передал ли плагин балансера объект плеера
-                if (e.object && e.object.listener) {
-                    console.log('Найден внутренний слушатель этого плеера, подписываемся...');
-                    
-                    e.object.listener.follow('view', (event) => {
-                        console.log('👉 СОБЫТИЕ СУБ-ПЛЕЕРА:', event.type, event);
-                    });
-                } else {
-                    console.log('⚠️ Внимание: Видео запущено в изолированном iFrame. Прямые события timeupdate/play недоступны через API Lampa.');
-                }
-            }
+    console.log('--- СНАЙПЕР ПЛЕЕРА ЗАПУЩЕН ---');
+
+    // Функция, которая вешает стандартные события на найденный тег video
+    const trackVideoElement = (video) => {
+        if (video.dataset.tracked) return; // Чтобы не вешать слушатели повторно
+        video.dataset.tracked = 'true';
+
+        console.log('🎯 ХАНТЕР: Нашли HTML5 плеер на странице!', video);
+
+        video.addEventListener('play', () => console.log('🔥 НАЧАЛОСЬ ВОСПРОИЗВЕДЕНИЕ (Браузер)'));
+        video.addEventListener('pause', () => console.log('⏸️ ПАУЗА (Браузер)'));
+        video.addEventListener('timeupdate', () => {
+            console.log(`⏱️ ВРЕМЯ: ${Math.floor(video.currentTime)} сек. / из ${Math.floor(video.duration || 0)} сек.`);
         });
     };
 
-    if (window.Lampa) {
-        startPlugin();
-    } else {
-        window.addEventListener('load', startPlugin);
-    }
+    // Запускаем бесконечный жесткий мониторинг DOM-дерева каждые полсекунды
+    setInterval(() => {
+        // Ищем обычный тег video в основном документе
+        const mainVideo = document.querySelector('video');
+        if (mainVideo) trackVideoElement(mainVideo);
+
+        // На случай, если балансер засунул плеер внутрь iframe
+        document.querySelectorAll('iframe').forEach(iframe => {
+            try {
+                const iframeVideo = iframe.contentWindow.document.querySelector('video');
+                if (iframeVideo) trackVideoElement(iframeVideo);
+            } catch (e) {
+                // Сюда падают ошибки CORS, если iframe загружен с абсолютно чужого домена
+            }
+        });
+    }, 500);
+
 })();
 
