@@ -9,11 +9,11 @@
                     console.log('ПЛАГИН ЗАПУЩЕН')
                     console.log('Объект window.Lampa:', window.Lampa)
                     console.log('Объект window: ', window)
-                    console.log('event_app: ', e)
+                    console.log('Event_app: ', e)
                 }
 
                 Lampa.Listener.follow('player', (event) => { // Listener для player объекта
-                    console.log('event_player: ', event)
+                    console.log('Event_player: ', event)
                 })
 
             })   
