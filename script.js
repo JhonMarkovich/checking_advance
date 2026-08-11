@@ -4,7 +4,7 @@
     const startPlugin = () => {
             // Если еще не готова, ждем событие старта
             Lampa.Listener.follow('app', (e) => { // Lampa.Listener.follow используется как слушатель событий в объектах Lampa, 
-                                                        // то есть тут мым слушаем 
+                                                        // то есть тут мы слушаем 
                 if (e.type == 'ready') {
                     console.log('ПЛАГИН ЗАПУЩЕН')
                     console.log('Объект window.Lampa:', window.Lampa)
