@@ -10,8 +10,9 @@
             // Если еще не готова, ждем событие старта
             Lampa.Listener.follow('app', function (e) {
                 if (e.type == 'ready') {
-                    console.log('Плагин Checking Advance успешно запущен после старта приложения!')
-                    console.log('Объект Lampa:', window.Lampa)
+                    console.log('ПЛАГИН ЗАПУЩЕН')
+                    console.log('Объект window.Lampa:', window.Lampa)
+                    console.log('Объект window: ', window)
                 }
             })
         }
