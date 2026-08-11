@@ -12,6 +12,7 @@
                     console.log('Event_app: ', e)
 
                     Lampa.Listener.follow('player', (event) => { // Listener для player объекта
+                        
                         if (event.type == 'ready'){
                             console.log('Event_player: ', event)
                         }
