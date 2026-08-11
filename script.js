@@ -2,28 +2,22 @@
     'use strict';
 
     const startPlugin = () => {
-        console.log('1. Плагин успешно загружен в память. Ждем событие ready...');
-
-        Lampa.Listener.follow('app', (e) => {
-            // Строго изолируем всё выполнение внутри ready!
-            if (e.type === 'ready') {
-                console.log('2. СИСТЕМА ГОТОВА (e.type == ready)');
-
-                // Безопасная проверка: существует ли вообще плеер в данной сборке Lampa
-                if (typeof window.Lampa !== 'undefined' && window.Lampa.Player) {
-                    console.log('3. Объект Lampa.Player найден! Пробуем подписаться...');
+        // Слушаем изменения экранов приложения
+        Lampa.Listener.follow('activity', (e) => {
+            
+            // Проверяем, что открылся экран плеера (даже если это iFrame балансера)
+            if (e.type === 'start' && e.component === 'player') {
+                console.log('🔥 УРА! ОБНАРУЖЕН ЗАПУСК ВИДЕО (Экран плеера открыт):', e);
+                
+                // Проверяем, передал ли плагин балансера объект плеера
+                if (e.object && e.object.listener) {
+                    console.log('Найден внутренний слушатель этого плеера, подписываемся...');
                     
-                    try {
-                        window.Lampa.Player.listener.follow('view', (event) => {
-                            console.log('🔥 СОБЫТИЕ ПЛЕЕРА:', event.type, event);
-                        });
-                        console.log('4. Подписка на "view" успешно оформлена!');
-                    } catch (err) {
-                        console.log('❌ Сбой при вызове follow:', err.message);
-                    }
-
+                    e.object.listener.follow('view', (event) => {
+                        console.log('👉 СОБЫТИЕ СУБ-ПЛЕЕРА:', event.type, event);
+                    });
                 } else {
-                    console.log('❌ Ошибка: window.Lampa.Player отсутствует в window в момент ready!');
+                    console.log('⚠️ Внимание: Видео запущено в изолированном iFrame. Прямые события timeupdate/play недоступны через API Lampa.');
                 }
             }
         });
@@ -35,3 +29,4 @@
         window.addEventListener('load', startPlugin);
     }
 })();
+
