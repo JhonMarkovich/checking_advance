@@ -12,9 +12,11 @@
                     console.log('Event_app: ', e)
 
                 }
-                if (e.type === 'player'){
-                    console.log('event_player: ', e)
-                    
+
+                if (Lampa.Player && Lampa.Player.listener) {
+                    Lampa.Player.listener.follow('view', (event) => {
+                        console.log('ГЛОБАЛЬНЫЙ ПЛЕЕР СОБЫТИЕ:', event.type, event)
+                    })
                 }
 
             })   
@@ -30,4 +32,3 @@
         window.addEventListener('load', startPlugin) // тут мы дожидаемся события 'load', то есть тогда когда загрузится приложение
     }
 })()
-
