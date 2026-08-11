@@ -2,39 +2,48 @@
     'use strict';
 
     const startPlugin = () => {
-        // Подключаемся к глобальному ядру событий Lampa через канал 'full'
-        // Этот канал гарантированно перехватывает инициализацию всех медиа-компонентов
-        Lampa.Listener.follow('full', (e) => {
-            
-            // Если балансер или торрент-клиент успешно передал поток в плеер
-            if (e.type === 'complite' || e.type === 'start') {
-                console.log('📦 КАНАЛ FULL: Медиа-поток инициирован:', e);
-            }
-        });
+        console.log('Plugin initialized.');
 
-        // Прямое и гарантированное подключение к шине таймлайна Lampa
-        // Она срабатывает ВСЕГДА, когда плеер Lampa (или плагин над ним) начинает отсчет секунд фильма
-        if (window.Lampa.Timeline && window.Lampa.Timeline.listener) {
-            window.Lampa.Timeline.listener.follow('update', (event) => {
-                console.log('🎬 ЛАМПА ТАЙМЛАЙН (Фильм идет):', event);
-                // Здесь будут доступны: event.data.time, event.data.duration, event.data.hash
-            });
-            console.log('✅ Глобальный таймлайн Lampa успешно взят на мушку!');
-        }
-
-        // Запасной перехватчик: инициализация самого плеера на уровне ядра
+        // Подключаемся к глобальному плееру на уровне ядра
         if (window.Lampa.Player && window.Lampa.Player.listener) {
+            
+            // Ловим момент старта, который у вас гарантированно сработал
             window.Lampa.Player.listener.follow('start', (event) => {
                 console.log('🚀 ЛАМПА ПЛЕЕР ЗАПУСТИЛСЯ (Ядро):', event);
+
+                // Как только плеер запустился, Lampa создает или обновляет экземпляр e.video или window.Lampa.Player.video
+                // Вешаем слушатели на внутренние события Lampa через callback-функции плеера
+                
+                // Перехват начала воспроизведения
+                window.Lampa.Player.listener.follow('play', () => {
+                    console.log('🔥 ЛАМПА: Видео поехало (play)');
+                });
+
+                // Перехват паузы
+                window.Lampa.Player.listener.follow('pause', () => {
+                    console.log('⏸️ ЛАМПА: Пауза (pause)');
+                });
+
+                // Перехват обновления времени через встроенный метод прогресса Lampa
+                window.Lampa.Player.listener.follow('timeupdate', (timeData) => {
+                    console.log('⏱️ ЛАМПА ВРЕМЯ:', timeData);
+                });
+                
+                // Перехват кастомных событий интерфейса видео
+                if (window.Lampa.Player.video && window.Lampa.Player.video.listener) {
+                    window.Lampa.Player.video.listener.follow('view', (vEvent) => {
+                        console.log('🎬 СОБЫТИЕ ИНТЕРФЕЙСА ПЛЕЕРА:', vEvent.type);
+                    });
+                }
             });
-            
+
+            // Ловим закрытие плеера, чтобы вовремя очищать данные
             window.Lampa.Player.listener.follow('destroy', () => {
                 console.log('⏹️ ЛАМПА ПЛЕЕР ЗАКРЫТ');
             });
         }
     };
 
-    // Корректный запуск плагина
     if (window.Lampa) {
         startPlugin();
     } else {
