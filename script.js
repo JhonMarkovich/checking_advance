@@ -1,1 +1,1 @@
-console.log(Lampa)
+console.log('Lampa: ', Lampa)
