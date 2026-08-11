@@ -1,34 +1,31 @@
 (() => {
-    'use strict' // эта подпись необходима для того чтобы скрипт работал на всех устройствах
+    'use strict'
 
     const startPlugin = () => {
-            // Если еще не готова, ждем событие старта
-            Lampa.Listener.follow('app', (e) => { // Lampa.Listener.follow используется как слушатель событий в объектах Lampa, 
-                                                        // то есть тут мым слушаем 
-                if (e.type == 'ready') {
-                    console.log('ПЛАГИН ЗАПУЩЕН')
-                    console.log('Объект window.Lampa:', window.Lampa)
-                    console.log('Объект window: ', window)
-                    console.log('Event_app: ', e)
+        Lampa.Listener.follow('app', (e) => {
+            
+            // Ждем полной готовности Lampa. Раньше этого момента Player не существует!
+            if (e.type == 'ready') {
+                console.log('ПЛАГИН ЗАПУЩЕН И ГОТОВ')
 
-                }
-
-                if (Lampa.Player && Lampa.Player.listener) {
-                    Lampa.Player.listener.follow('view', (event) => {
-                        console.log('ГЛОБАЛЬНЫЙ ПЛЕЕР СОБЫТИЕ:', event.type, event)
+                // Проверяем наличие глобального плеера
+                if (window.Lampa.Player && window.Lampa.Player.listener) {
+                    console.log('Слушатель плеера успешно подключен!')
+                    
+                    window.Lampa.Player.listener.follow('view', (event) => {
+                        console.log('ГЛОБАЛЬНЫЙ ПЛЕЕР СОБЫТИЕ (тип):', event.type)
+                        console.log('ДАННЫЕ СОБЫТИЯ:', event)
                     })
+                } else {
+                    console.log('Ошибка: window.Lampa.Player не найден.');
                 }
-
-            })   
-            Lampa.Listener.follow('player', (event) => {
-                console.log('Event_player: ', event)
-            })
-        }
+            }
+        })
+    }
     
-    // Запускаем плагин, когда скрипт загрузится в систему
     if (window.Lampa) {
         startPlugin()
     } else {
-        window.addEventListener('load', startPlugin) // тут мы дожидаемся события 'load', то есть тогда когда загрузится приложение
+        window.addEventListener('load', startPlugin)
     }
 })()
