@@ -1,34 +1,46 @@
 (() => {
-    'use strict'
+    'use strict';
 
     const startPlugin = () => {
-        // Слушаем главный канал Lampa
-        Lampa.Listener.follow('app', (e) => {
+        // Подключаемся к глобальному ядру событий Lampa через канал 'full'
+        // Этот канал гарантированно перехватывает инициализацию всех медиа-компонентов
+        Lampa.Listener.follow('full', (e) => {
             
-            // Ловим момент, когда Lampa ИНИЦИАЛИЗИРУЕТ плеер для фильма
-            if (e.type === 'player') {
-                console.log('📦 Lampa создала объект плеера:', e)
-
-                // Проверяем наличие встроенного слушателя в событии
-                if (e.player && e.player.listener) {
-                    
-                    // Подписываемся на события именно ЭТОГО запущенного экземпляра
-                    e.player.listener.follow('view', (event) => {
-                        console.log('🎬 СОБЫТИЕ КАНАЛА LAMPA:', event.type)
-                        console.log('Данные события:', event)
-                    })
-                    
-                    console.log('✅ Успешно подписались на e.player.listener')
-                }
+            // Если балансер или торрент-клиент успешно передал поток в плеер
+            if (e.type === 'complite' || e.type === 'start') {
+                console.log('📦 КАНАЛ FULL: Медиа-поток инициирован:', e);
             }
-        })
-    }
-    
+        });
+
+        // Прямое и гарантированное подключение к шине таймлайна Lampa
+        // Она срабатывает ВСЕГДА, когда плеер Lampa (или плагин над ним) начинает отсчет секунд фильма
+        if (window.Lampa.Timeline && window.Lampa.Timeline.listener) {
+            window.Lampa.Timeline.listener.follow('update', (event) => {
+                console.log('🎬 ЛАМПА ТАЙМЛАЙН (Фильм идет):', event);
+                // Здесь будут доступны: event.data.time, event.data.duration, event.data.hash
+            });
+            console.log('✅ Глобальный таймлайн Lampa успешно взят на мушку!');
+        }
+
+        // Запасной перехватчик: инициализация самого плеера на уровне ядра
+        if (window.Lampa.Player && window.Lampa.Player.listener) {
+            window.Lampa.Player.listener.follow('start', (event) => {
+                console.log('🚀 ЛАМПА ПЛЕЕР ЗАПУСТИЛСЯ (Ядро):', event);
+            });
+            
+            window.Lampa.Player.listener.follow('destroy', () => {
+                console.log('⏹️ ЛАМПА ПЛЕЕР ЗАКРЫТ');
+            });
+        }
+    };
+
+    // Корректный запуск плагина
     if (window.Lampa) {
-        startPlugin()
+        startPlugin();
     } else {
-        window.addEventListener('load', startPlugin)
+        window.addEventListener('load', startPlugin);
     }
-})()
+})();
+
 
 
