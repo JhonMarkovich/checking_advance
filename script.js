@@ -14,6 +14,7 @@
                 }
                 if (e.type === 'player'){
                     console.log('event_player: ', e)
+                    
                 }
 
             })   
