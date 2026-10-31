@@ -8,6 +8,25 @@
 
     const container = document.createElement('div')
 
+    const stopEvent = (event) => {
+        event.stopPropagation()
+    }
+
+    [
+    'keydown',
+    'keyup',
+    'keypress',
+    'click',
+    'mousedown',
+    'mouseup',
+    'pointerdown',
+    'pointerup',
+    'touchstart',
+    'touchend'
+].forEach((eventName) => {
+    container.addEventListener(eventName, stopEvent)
+})
+
     container.style.cssText = `
         position: fixed;
         top: 50%;
