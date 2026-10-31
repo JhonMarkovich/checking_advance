@@ -13,29 +13,43 @@
         password_user = password
     }
 
-    document.body.innerHTML = `
-        <div style="margin-left: 30vw; width: 500px; height: 200px; display: flex; flex-direction: column; 
-        align-items: center; justify-content: center; background-color: white;">
-            <div>
-                <span style="font-size: 18px; color: blue;">Input your account data for synchronized progress</span>
-            </div>
 
-            <input placeholder="Input login of your Cinaureol account" required type="text" id="name" name="name" onKeyDown={async(e) => {
+    const container = document.createElement('div')
+
+    container.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 500px;
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+        background: white;
+        z-index: 999999;
+        border-radius: 10px;
+    `
+
+    container.innerHTML = `
+            <span style="font-size: 18px; color: blue;">Input your account data for synchronized progress</span>
+
+            <input placeholder="Input login of your Cinaureol account" required type="text" id="name" name="name" onClick={async(e) => {
         if(e.key == 'Enter'){
             await setLogin(e)
-            console.log("Login e: ", e)
+            console.log("Login e: ", e.target.value)
         }
             }}/>
 
-            <input placeholder="Input password of your Cinaureol account" required type="password" id="name2" name="name2" onKeyDown={async(e) => {
+            <input placeholder="Input password of your Cinaureol account" required type="password" id="name2" name="name2" onClick={async(e) => {
         if(e.key == 'Enter'){
             await setPassword(e)
-            console.log("Password e: ", e)
+            console.log("Password e: ", e.target.value)
         }
             }}/>
-
-        </div>
     `
+    document.body.appendChild(container)
 
     const trackVideoElement = (video) => {
         if (video.dataset.tracked) return
