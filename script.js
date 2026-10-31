@@ -14,6 +14,8 @@
                 'http://192.168.0.14:8000/auth/user/',
                 {
                     method: 'POST',
+                    mode: 'cors',
+                    targetAddressSpace: 'local',
                     headers: {
                         'Content-Type' : 'application/json'
                     },
