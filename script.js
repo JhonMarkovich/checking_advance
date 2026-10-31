@@ -14,26 +14,26 @@
     }
 
     document.body.innerHTML = `
-        <div style="width: 300px; height: 200px; display: flex; flex-direction: column; 
+        <div style="margin-left: 30vw; width: 500px; height: 200px; display: flex; flex-direction: column; 
         align-items: center; justify-content: center; background-color: white;">
             <div>
-                <span style="font-size: 24px; color: blue;">Input your account data for synchronized progress</span>
+                <span style="font-size: 18px; color: blue;">Input your account data for synchronized progress</span>
             </div>
 
-            <input placeholder="Input login of your Cinaureol account" type="password" onKeyDown={async(e) => {
+            <input placeholder="Input login of your Cinaureol account" required type="text" id="name" name="name" onKeyDown={async(e) => {
         if(e.key == 'Enter'){
-            setLogin(e)
+            await setLogin(e)
             console.log("Login e: ", e)
         }
             }}/>
 
-            <input placeholder="Input password of your Cinaureol account" type="password" onKeyDown={async(e) => {
+            <input placeholder="Input password of your Cinaureol account" required type="password" id="name2" name="name2" onKeyDown={async(e) => {
         if(e.key == 'Enter'){
-            setPassword(e)
+            await setPassword(e)
             console.log("Password e: ", e)
         }
             }}/>
-        
+
         </div>
     `
 
