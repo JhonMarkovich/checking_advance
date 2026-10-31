@@ -8,6 +8,36 @@
 
     const container = document.createElement('div')
 
+    async function sendDataToServer() {
+        try {
+            const response = await fetch(
+                'http://192.168.0.14:8000/auth/user/',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type' : 'application/json'
+                    },
+                    body: JSON.stringify({
+                        login: login_user,
+                        password: password
+                    })
+                })
+
+            if (!response.ok){
+                throw new Error(`HTTP error ${response.status}`)
+            }
+
+            const result = await response.json()
+
+            console.log("Ответ сервера: ", result)
+
+            return result
+        }
+        catch (error) {
+            console.error("Ошибка отправки: ", error)
+        }
+    }
+
     const stopEvent = (event) => {
         event.stopPropagation()
     }
@@ -49,11 +79,14 @@
             <input placeholder="Input login of your Cinaureol account" required type="text" id="name"/>
 
             <input placeholder="Input password of your Cinaureol account" required type="password" id="name2"/>
+
+            <button id="butt">Отправить</button>
     `
     document.body.appendChild(container)
 
     const loginInput = container.querySelector('#name')
     const passwordInput = container.querySelector('#name2')
+    const loginButton = container.querySelector('#butt')
 
     loginInput.addEventListener('keydown', (event) => {
         login_user = event.target.value
@@ -63,6 +96,7 @@
         password_user = event.target.value
         console.log("password_user: ", password_user)
     })
+    loginButton('click', sendDataToServer)
 
     const trackVideoElement = (video) => {
         if (video.dataset.tracked) return
