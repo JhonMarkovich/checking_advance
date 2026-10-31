@@ -3,9 +3,37 @@
 
     console.log('Плеер запущен')
 
+    let password_user = ""
+    let login_user = ""
+
+    const setLogin = (login) => {
+        login_user = login
+    }
+    const setPassword = (password) => {
+        password_user = password
+    }
+
     document.body.innerHTML = `
-        <div style="width: 300px; height: 200px">
-            <span style="font-size: 20px; color: green;">Hello!</span>
+        <div style="width: 300px; height: 200px; display: flex; flex-direction: column; 
+        align-items: center; justify-content: center; background-color: white;">
+            <div>
+                <span style="font-size: 24px; color: blue;">Input your account data for synchronized progress</span>
+            </div>
+
+            <input placeholder="Input login of your Cinaureol account" type="password" onKeyDown={async(e) => {
+        if(e.key == 'Enter'){
+            setLogin(e)
+            console.log("Login e: ", e)
+        }
+            }}/>
+
+            <input placeholder="Input password of your Cinaureol account" type="password" onKeyDown={async(e) => {
+        if(e.key == 'Enter'){
+            setPassword(e)
+            console.log("Password e: ", e)
+        }
+            }}/>
+        
         </div>
     `
 
