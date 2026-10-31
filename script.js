@@ -33,7 +33,7 @@
     `
 
     container.innerHTML = `
-            <span style="font-size: 18px; color: blue;">Input your account data for synchronized progress</span>
+            <span style="font-size: 18px; color: blue;">Input your account data for progress</span>
 
             <input placeholder="Input login of your Cinaureol account" required type="text" id="name" name="name" onClick={async(e) => {
         if(e.key == 'Enter'){
