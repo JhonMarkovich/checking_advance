@@ -96,7 +96,7 @@
         password_user = event.target.value
         console.log("password_user: ", password_user)
     })
-    loginButton('click', sendDataToServer)
+    loginButton.addEventListener('click', sendDataToServer)
 
     const trackVideoElement = (video) => {
         if (video.dataset.tracked) return
