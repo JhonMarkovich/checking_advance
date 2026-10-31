@@ -6,14 +6,6 @@
     let password_user = ""
     let login_user = ""
 
-    const setLogin = (login) => {
-        login_user = login
-    }
-    const setPassword = (password) => {
-        password_user = password
-    }
-
-
     const container = document.createElement('div')
 
     container.style.cssText = `
@@ -35,21 +27,23 @@
     container.innerHTML = `
             <span style="font-size: 18px; color: blue;">Input your account data for progress</span>
 
-            <input placeholder="Input login of your Cinaureol account" required type="text" id="name" name="name" onClick={async(e) => {
-        if(e.key == 'Enter'){
-            await setLogin(e)
-            console.log("Login e: ", e.target.value)
-        }
-            }}/>
+            <input placeholder="Input login of your Cinaureol account" required type="text" id="name"/>
 
-            <input placeholder="Input password of your Cinaureol account" required type="password" id="name2" name="name2" onClick={async(e) => {
-        if(e.key == 'Enter'){
-            await setPassword(e)
-            console.log("Password e: ", e.target.value)
-        }
-            }}/>
+            <input placeholder="Input password of your Cinaureol account" required type="password" id="name2"/>
     `
     document.body.appendChild(container)
+
+    const loginInput = document.querySelector('#name')
+    const passwordInput = document.querySelector('#name2')
+
+    loginInput.addEventListener('keydown', (event) => {
+        login_user = event.target.value
+        console.log("login_user: ", login_user)
+    }
+    passwordInput.addEventListener('keydown', (event) => {
+        password_user = event.target.value
+        console.log("password_user: ", password_user)
+    }
 
     const trackVideoElement = (video) => {
         if (video.dataset.tracked) return
