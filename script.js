@@ -3,6 +3,12 @@
 
     console.log('Плеер запущен')
 
+    document.body.innerHTML = `
+        <div style="width: 300px; height: 200px">
+            <span style="font-size: 20px; color: green;">Hello!</span>
+        </div>
+    `
+
     const trackVideoElement = (video) => {
         if (video.dataset.tracked) return
         video.dataset.tracked = 'true'
@@ -31,4 +37,3 @@
     }, 500)
 
 })()
-
