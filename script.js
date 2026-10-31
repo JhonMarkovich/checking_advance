@@ -39,11 +39,11 @@
     loginInput.addEventListener('keydown', (event) => {
         login_user = event.target.value
         console.log("login_user: ", login_user)
-    }
+    })
     passwordInput.addEventListener('keydown', (event) => {
         password_user = event.target.value
         console.log("password_user: ", password_user)
-    }
+    })
 
     const trackVideoElement = (video) => {
         if (video.dataset.tracked) return
