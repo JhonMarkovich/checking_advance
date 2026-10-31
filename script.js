@@ -19,7 +19,7 @@
                     },
                     body: JSON.stringify({
                         login: login_user,
-                        password: password
+                        password: password_user
                     })
                 })
 
