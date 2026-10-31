@@ -33,8 +33,8 @@
     `
     document.body.appendChild(container)
 
-    const loginInput = document.querySelector('#name')
-    const passwordInput = document.querySelector('#name2')
+    const loginInput = container.querySelector('#name')
+    const passwordInput = container.querySelector('#name2')
 
     loginInput.addEventListener('keydown', (event) => {
         login_user = event.target.value
